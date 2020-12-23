@@ -35,6 +35,16 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////////////////////
+//                                                                               // 
+// This source version has been altered to add the functionality of rolling log  //
+// file without needing to restart the application. The altered code chunks are  //
+// marked with <START ALTERED CODE> <END ALTERED CODE> comments.                 //
+//                                                                               //
+// Author: Ander Ansuategi <ander.ansuategi@tekniker.es>                         //
+///////////////////////////////////////////////////////////////////////////////////
+
+
 #ifndef EASYLOGGINGPP_H
 #define EASYLOGGINGPP_H
 //
@@ -72,7 +82,9 @@
 #   if defined(__GXX_EXPERIMENTAL_CXX0X__)
 #      define _ELPP_CXX0X 1
 #   elif (_ELPP_GCC_VERSION >= 40801)
-#      define _ELPP_CXX11 1
+// <START ALTERED CODE>
+#      define _ELPP_CXX11 0  // original value was 1
+// <END ALTERED CODE>
 #   endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
 #endif // defined(__GNUC__)
 // VC++
@@ -132,7 +144,9 @@
 #endif // defined(__GNUC__) && (_ELPP_CXX0X || _ELPP_CXX11)
 // Qt
 #if defined(QT_CORE_LIB)
-#   if (defined(QT_VERSION) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+// <START ALTERED CODE>
+#   if (defined(QT_VERSION) && /*QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)*/ QT_VERSION >= 0x050000)
+// <END ALTERED CODE>
 #      define _ELPP_QT_5 1
 #   else
 #      define _ELPP_QT_5 0
