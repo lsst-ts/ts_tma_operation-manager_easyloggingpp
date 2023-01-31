@@ -1018,13 +1018,10 @@ public:
         char dateBufferOut_[kDateBuffSize_] = "";
 #if _ELPP_OS_UNIX
         bool hasTime_ = ((type_ & constants_->kDateTime) || (type_ & constants_->kTimeOnly));
-        //timeval currTime;
-        //gettimeofday(&currTime, NULL);
-        timespec currTime;
-        clock_gettime(CLOCK_TAI, &currTime);
+        timeval currTime;
+        gettimeofday(&currTime, NULL);
         if (hasTime_) {
-            //milliSeconds = currTime.tv_usec / milliSecondOffset_ ;
-            milliSeconds = currTime.tv_nsec / 1000000 ;
+            milliSeconds = currTime.tv_usec / milliSecondOffset_ ;
         }
         struct tm * timeInfo = localtime(&currTime.tv_sec);
         strftime(dateBuffer_, sizeof(dateBuffer_), "%Y-%m-%d %H:%M:%S", timeInfo);
