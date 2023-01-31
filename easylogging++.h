@@ -1027,7 +1027,7 @@ public:
             milliSeconds = currTime.tv_nsec / 1000000 ;
         }
         struct tm * timeInfo = localtime(&currTime.tv_sec);
-        strftime(dateBuffer_, sizeof(dateBuffer_), bufferFormat_.c_str(), timeInfo);
+        strftime(dateBuffer_, sizeof(dateBuffer_), "%Y-%m-%d %H:%M:%S", timeInfo);
         if (hasTime_) {
             SPRINTF(dateBufferOut_, "%s.%03ld", dateBuffer_, milliSeconds);
         } else {
