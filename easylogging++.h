@@ -2055,17 +2055,27 @@ private:
     }
 
     std::fstream* newFileStream(const std::string& filename, bool forceNew = false) {
+        // Add the current date time to filename to make it unique
+        std::string newName = filename;
+        std::time_t currentTime = std::time(nullptr);
+        char buffer[30];
+        // Only accurate to minutes to minimize the possibility of the same
+        // name generation (race condition)
+        if (std::strftime(buffer, sizeof(buffer), "%Y%m%d_%H%M", std::localtime(&currentTime)) > 0) {
+            newName = std::string(filename) + "." + buffer;
+        }
+
         std::fstream *fs = NULL;
         if (forceNew) {
-            fs = new std::fstream(filename.c_str(), std::fstream::out);
+            fs = new std::fstream(newName.c_str(), std::fstream::out);
         } else {
-            fs = new std::fstream(filename.c_str(), std::fstream::out | std::fstream::app);
+            fs = new std::fstream(newName.c_str(), std::fstream::out | std::fstream::app);
         }
         if (fs->is_open()) {
             fs->flush();
         } else {
             internal::utilities::safeDelete(fs, false);
-            std::cerr << "Bad file [" << filename << "]" << std::endl;
+            std::cerr << "Bad file [" << newName << "]" << std::endl;
             return NULL;
         }
         return fs;
